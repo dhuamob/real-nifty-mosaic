@@ -13,6 +13,7 @@ import Loading from "./Loading/Loading";
 import Navbar from "./Navbar/Navbar";
 import MyCryptoBoys from "./MyCryptoBoys/MyCryptoBoys";
 import Queries from "./Queries/Queries";
+import Landing from "./Landing";
 
 const ipfsClient = require("ipfs-http-client");
 const ipfs = ipfsClient({
@@ -56,7 +57,7 @@ class App extends Component {
         lastMintTime: localStorage.getItem(this.state.accountAddress),
       });
       this.state.lastMintTime === undefined || this.state.lastMintTime === null
-        ? (mintBtn.innerHTML = "Mint My Crypto Boy")
+        ? (mintBtn.innerHTML = "Mint Mosaic NFT")
         : this.checkIfCanMint(parseInt(this.state.lastMintTime));
     }
   };
@@ -70,7 +71,7 @@ class App extends Component {
       const diff = countDownTime - now;
       if (diff < 0) {
         mintBtn.removeAttribute("disabled");
-        mintBtn.innerHTML = "Mint My Crypto Boy";
+        mintBtn.innerHTML = "Mint Mosaic NFT";
         localStorage.removeItem(this.state.accountAddress);
         clearInterval(interval);
       } else {
@@ -298,74 +299,73 @@ class App extends Component {
   };
 
   render() {
+    // if (!this.state.metamaskConnected) {
+    //   return <ConnectToMetamask connectToMetamask={this.connectToMetamask} />
+    // } else if (!this.state.contractDetected) {
+    //   return <ContractNotDeployed />
+    // } else if (this.state.loading) {
+    //   return <Loading />
+    // }
+
     return (
-      <div className="container">
-        {!this.state.metamaskConnected ? (
-          <ConnectToMetamask connectToMetamask={this.connectToMetamask} />
-        ) : !this.state.contractDetected ? (
-          <ContractNotDeployed />
-        ) : this.state.loading ? (
-          <Loading />
-        ) : (
-          <>
-            <HashRouter basename="/">
-              <Navbar />
-              <Route
-                path="/"
-                exact
-                render={() => (
-                  <AccountDetails
-                    accountAddress={this.state.accountAddress}
-                    accountBalance={this.state.accountBalance}
-                  />
-                )}
+      <div>
+        <HashRouter basename="/">
+          <Navbar />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <Landing />
+            )}
+          />
+          <Route
+            path="/account-details"
+            exact
+            render={() => (
+              <AccountDetails
+                accountAddress={this.state.accountAddress}
+                accountBalance={this.state.accountBalance}
               />
-              <Route
-                path="/mint"
-                render={() => (
-                  <FormAndPreview
-                    mintMyNFT={this.mintMyNFT}
-                    nameIsUsed={this.state.nameIsUsed}
-                    colorIsUsed={this.state.colorIsUsed}
-                    colorsUsed={this.state.colorsUsed}
-                    setMintBtnTimer={this.setMintBtnTimer}
-                  />
-                )}
+            )}
+          />
+          <Route
+            path="/mint"
+            render={() => (
+              <FormAndPreview
+                mintMyNFT={this.mintMyNFT}
+                nameIsUsed={this.state.nameIsUsed}
+                colorIsUsed={this.state.colorIsUsed}
+                colorsUsed={this.state.colorsUsed}
+                setMintBtnTimer={this.setMintBtnTimer}
               />
-              <Route
-                path="/marketplace"
-                render={() => (
-                  <AllCryptoBoys
-                    accountAddress={this.state.accountAddress}
-                    cryptoBoys={this.state.cryptoBoys}
-                    totalTokensMinted={this.state.totalTokensMinted}
-                    changeTokenPrice={this.changeTokenPrice}
-                    toggleForSale={this.toggleForSale}
-                    buyCryptoBoy={this.buyCryptoBoy}
-                  />
-                )}
+            )}
+          />
+          <Route
+            path="/marketplace"
+            render={() => (
+              <AllCryptoBoys
+                accountAddress={this.state.accountAddress}
+                cryptoBoys={this.state.cryptoBoys}
+                totalTokensMinted={this.state.totalTokensMinted}
+                changeTokenPrice={this.changeTokenPrice}
+                toggleForSale={this.toggleForSale}
+                buyCryptoBoy={this.buyCryptoBoy}
               />
-              <Route
-                path="/my-tokens"
-                render={() => (
-                  <MyCryptoBoys
-                    accountAddress={this.state.accountAddress}
-                    cryptoBoys={this.state.cryptoBoys}
-                    totalTokensOwnedByAccount={
-                      this.state.totalTokensOwnedByAccount
-                    }
-                  />
-                )}
+            )}
+          />
+          <Route
+            path="/my-tokens"
+            render={() => (
+              <MyCryptoBoys
+                accountAddress={this.state.accountAddress}
+                cryptoBoys={this.state.cryptoBoys}
+                totalTokensOwnedByAccount={
+                  this.state.totalTokensOwnedByAccount
+                }
               />
-              <Route
-                path="/queries"
-                render={() => (
-                  <Queries cryptoBoysContract={this.state.cryptoBoysContract} />
-                )}
-              />
-            </HashRouter>
-          </>
-        )}
+            )}
+          />
+        </HashRouter>
       </div>
     );
   }

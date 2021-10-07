@@ -1,14 +1,12 @@
 import React from "react";
-import icon from "./favicon-32x32.png";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
       <div className="container">
-        <img src={icon} alt="" />
         <Link to="/" className="navbar-brand ml-2">
-          NFT's
+          <img src="/images/logo.png" alt="" className="logo" />
         </Link>
         <button
           className="navbar-toggler"
@@ -39,12 +37,7 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               <Link to="/my-tokens" className="nav-link">
-                My Tokens
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/queries" className="nav-link">
-                Queries
+                My Mosaics
               </Link>
             </li>
           </ul>
